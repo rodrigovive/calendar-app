@@ -4,7 +4,7 @@ import Calendar from 'components/calendar';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import moment from 'moment';
-import useCalendar from './use-calendar';
+import useCalendar from 'hooks/use-calendar';
 import useStyles from './styles';
 
 interface Props {

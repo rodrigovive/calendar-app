@@ -14,6 +14,7 @@ const Calendar: React.FC<Props> = ({days}) => {
   const classes = useStyles();
   const [isModalReminderOpen, setModalReminderOpen] = React.useState(false);
   const [reminder, setReminder] = React.useState<Reminder>(initialReminder);
+  console.log('test');
   return (
     <>
       <table className={classes.table}>
@@ -45,7 +46,6 @@ const Calendar: React.FC<Props> = ({days}) => {
         isOpen={isModalReminderOpen}
         setModalOpen={setModalReminderOpen}
         reminder={reminder}
-        setReminder={setReminder}
       />
     </>
   );

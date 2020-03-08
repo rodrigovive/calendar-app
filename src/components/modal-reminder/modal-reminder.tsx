@@ -6,10 +6,9 @@ import {
   Fade,
   TextField,
   Button,
+  Typography,
 } from '@material-ui/core';
 import useStyles from './styles';
-import {useFormik} from 'formik';
-import * as Yup from 'yup';
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -18,55 +17,44 @@ import {
 import MomentUtils from '@date-io/moment';
 import {Reminder, initialReminder} from 'types/reminder';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import useSetState from 'hooks/use-state';
 
 type Props = {
   isOpen: boolean;
   setModalOpen: (status: boolean) => void;
   reminder: Reminder;
-  setReminder: (values: Reminder) => void;
+  maxTextLength: number;
 };
-
-const ReminderSchema = Yup.object().shape({
-  reminderText: Yup.string()
-    .min(2, 'Too Short!')
-    .max(30, 'Too Long!')
-    .required('Required'),
-  city: Yup.string().required('Required'),
-});
 
 const ModalReminder = ({
   isOpen,
   setModalOpen,
-  reminder: {day, reminderText, city, time, color, id},
-  setReminder,
+  reminder: {day, reminderText, city, color, id},
+  maxTextLength,
 }: Props) => {
   const classes = useStyles();
   const handleClose = () => {
     setModalOpen(false);
   };
-  const formik = useFormik<Reminder>({
-    initialValues: {
-      reminderText,
-      city,
-      day,
-      //time: date.d('HH:mm'),
-      time,
-      color,
-    },
-    validationSchema: ReminderSchema,
-    onSubmit: values => {
-      console.log('values', values);
-    },
-  });
+  const [values, setValues] = useSetState(initialReminder);
+  const isValidText = values.reminderText.length >= maxTextLength;
   React.useEffect(() => {
-    formik.setValues({
+    setValues({
       day,
       reminderText,
       city,
-      time,
       color,
     });
-  }, [day, reminderText, city, time, color]);
+  }, [day, reminderText, city, color]);
+  const handleSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    console.log(values);
+  };
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+    setValues({
+      [e.target.name]: e.target.value,
+    });
+  };
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Modal
@@ -86,30 +74,31 @@ const ModalReminder = ({
       >
         <Fade in={isOpen}>
           <div className={classes.paper}>
-            <h2 id="transition-modal-title">
-              {id ? `Remind ${id}` : 'New reminder'}
-            </h2>
-            <form onSubmit={formik.handleSubmit}>
+            <Typography id="transition-modal-title" variant="h5">
+              {id ? `Edit reminder ${id}` : 'New reminder'}
+            </Typography>
+            <form onSubmit={handleSubmit}>
               <Grid container direction="column" spacing={3}>
                 <Grid item xs={12}>
                   <TextField
                     InputLabelProps={{shrink: true}}
                     id="reminderText"
-                    error={Boolean(
-                      formik.touched['reminderText'] &&
-                        formik.errors['reminderText'],
-                    )}
+                    error={isValidText}
                     helperText={
-                      formik.touched['reminderText']
-                        ? formik.errors['reminderText']
-                        : ''
+                      isValidText ? (
+                        <Typography
+                          data-testid="title-error-message"
+                          component={'span'}
+                        >
+                          The text is too long!
+                        </Typography>
+                      ) : null
                     }
                     name="reminderText"
-                    label="Text"
-                    value={formik.values['reminderText']}
+                    label="Reminder title"
+                    value={values.reminderText}
                     fullWidth
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
+                    onChange={handleChange}
                     autoFocus
                   />
                 </Grid>
@@ -117,19 +106,12 @@ const ModalReminder = ({
                   <TextField
                     InputLabelProps={{shrink: true}}
                     id="city"
-                    error={Boolean(
-                      formik.touched['city'] && formik.errors['city'],
-                    )}
-                    helperText={
-                      formik.touched['city'] ? formik.errors['city'] : ''
-                    }
                     fullWidth
                     name="city"
                     required
                     label="City"
-                    value={formik.values['city']}
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
+                    value={values.city}
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -137,12 +119,13 @@ const ModalReminder = ({
                     label="Date"
                     autoOk
                     variant="inline"
-                    value={formik.values.day}
+                    value={values.day}
                     onChange={date => {
-                      formik.setFieldTouched('day');
-                      formik.setFieldValue('day', date);
+                      setValues({
+                        day: date,
+                      });
                     }}
-                    name="date"
+                    name="day"
                     KeyboardButtonProps={{
                       'aria-label': 'reminder-date',
                     }}
@@ -154,11 +137,12 @@ const ModalReminder = ({
                     id="time-picker"
                     label="Time"
                     variant="inline"
-                    name="time"
-                    value={formik.values.time}
+                    name="day"
+                    value={values.day}
                     onChange={date => {
-                      formik.setFieldTouched('time');
-                      formik.setFieldValue('time', date);
+                      setValues({
+                        day: date,
+                      });
                     }}
                     KeyboardButtonProps={{
                       'aria-label': 'reminder-time',
@@ -185,6 +169,8 @@ const ModalReminder = ({
 };
 ModalReminder.defaultProps = {
   reminder: initialReminder,
+  isOpen: false,
+  maxTextLength: 30,
 };
 
 export default ModalReminder;

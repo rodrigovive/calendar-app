@@ -68,7 +68,8 @@
     "baseUrl": "./",
     "paths": {
       "components/*": ["src/components/*"],
-      "types/*": ["src/types/*"]
+      "types/*": ["src/types/*"],
+      "hooks/*": ["src/hooks/*"]
     }
   }
 }
