@@ -6,12 +6,12 @@ import theme from './themes/theme';
 
 const App = () => {
   return (
-    <>
+    <main>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Home />
       </ThemeProvider>
-    </>
+    </main>
   );
 };
 

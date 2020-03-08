@@ -1,13 +1,16 @@
 import React from 'react';
 import {Typography} from '@material-ui/core';
 import useStyles from './styles';
-import {Moment} from 'moment';
+import moment, {Moment} from 'moment';
+import {Reminder, initialReminder} from 'types/reminder';
 
 type Props = {
   weekCalendar: Moment[];
+  setModalOpen: (isOpen: boolean) => void;
+  setReminder: (values: Reminder) => void;
 };
 
-const Day: React.FC<Props> = ({weekCalendar}) => {
+const Day: React.FC<Props> = ({weekCalendar, setModalOpen, setReminder}) => {
   const classes = useStyles();
   return (
     <div className={classes.containerTable}>
@@ -15,19 +18,29 @@ const Day: React.FC<Props> = ({weekCalendar}) => {
         <table className={classes.tableBg}>
           <tbody>
             <tr>
-              {weekCalendar.map((_, idx) => (
+              {weekCalendar.map((day, idx) => (
                 <td key={idx} className={classes.rowBg} />
               ))}
             </tr>
           </tbody>
         </table>
       </div>
-      <div>
+      <div className={classes.containerRowTable}>
         <table>
           <thead>
             <tr>
               {weekCalendar.map((day, idx) => (
-                <td key={idx} className={classes.rowHead}>
+                <td
+                  key={idx}
+                  className={classes.rowHead}
+                  onClick={() => {
+                    setReminder({
+                      ...initialReminder,
+                      day,
+                    });
+                    setModalOpen(true);
+                  }}
+                >
                   <Typography color="inherit" align="left">
                     {day.date()}
                   </Typography>
@@ -38,7 +51,19 @@ const Day: React.FC<Props> = ({weekCalendar}) => {
           <tbody>
             <tr>
               {weekCalendar.map((day, idx) => (
-                <td key={idx} className={classes.rowBody}>
+                <td
+                  key={idx}
+                  className={classes.rowBody}
+                  onClick={e => {
+                    e.stopPropagation();
+                    setReminder({
+                      ...initialReminder,
+                      reminderText: `Note ${idx + 1}`,
+                      id: idx + 1,
+                    });
+                    setModalOpen(true);
+                  }}
+                >
                   <Typography align="left">Note {idx + 1}</Typography>
                 </td>
               ))}

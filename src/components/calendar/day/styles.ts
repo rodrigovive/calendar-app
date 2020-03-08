@@ -3,8 +3,8 @@ import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 export default makeStyles((theme: Theme) =>
   createStyles({
     containerTable: {
-      position: 'relative',
       zIndex: 1,
+      position: 'relative',
       '& table': {
         width: '100%',
         borderCollapse: 'collapse',
@@ -28,6 +28,7 @@ export default makeStyles((theme: Theme) =>
       left: '0',
       bottom: '0',
       right: '0',
+      zIndex: 1,
     },
     rowBg: {
       borderStyle: 'solid',
@@ -37,6 +38,10 @@ export default makeStyles((theme: Theme) =>
       '&:first-child, &:last-child': {
         backgroundColor: 'rgba(52,40,104,.06)',
       },
+    },
+    containerRowTable: {
+      position: 'relative',
+      zIndex: 9,
     },
   }),
 );
