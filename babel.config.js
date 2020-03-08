@@ -13,9 +13,21 @@ module.exports = {
     '@babel/preset-typescript',
   ],
   plugins: [
-    '@babel/plugin-transform-runtime',
-    '@babel/plugin-syntax-dynamic-import',
-    '@babel/plugin-proposal-class-properties',
+    [
+      'module-resolver',
+      {
+        alias: {
+          components: './src/components',
+        },
+      },
+    ],
+    [
+      '@babel/plugin-transform-runtime',
+      {
+        regenerator: true,
+      },
+    ],
+    ['@babel/plugin-proposal-class-properties'],
   ],
   env: {
     production: {
