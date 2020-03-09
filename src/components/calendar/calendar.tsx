@@ -7,14 +7,16 @@ import ModalReminder from 'components/modal-reminder';
 import {Reminder, initialReminder} from 'types/reminder';
 
 type Props = {
-  days: Moment[][];
+  days: {
+    weekCalendar: Moment[];
+    id: string;
+  }[];
 };
 
 const Calendar: React.FC<Props> = ({days}) => {
   const classes = useStyles();
   const [isModalReminderOpen, setModalReminderOpen] = React.useState(false);
   const [reminder, setReminder] = React.useState<Reminder>(initialReminder);
-  console.log('test');
   return (
     <>
       <table className={classes.table}>
@@ -30,9 +32,10 @@ const Calendar: React.FC<Props> = ({days}) => {
         <tbody>
           <tr>
             <td>
-              {days.map((weekCalendar, idx) => (
+              {days.map(({weekCalendar, id}, idx) => (
                 <Day
-                  key={idx}
+                  key={id}
+                  weekNumber={id}
                   weekCalendar={weekCalendar}
                   setReminder={setReminder}
                   setModalOpen={setModalReminderOpen}

@@ -20,6 +20,7 @@ module.exports = {
           components: './src/components',
           types: './src/types',
           hooks: './src/hooks',
+          context: './src/context',
         },
       },
     ],

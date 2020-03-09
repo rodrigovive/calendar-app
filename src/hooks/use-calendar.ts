@@ -1,9 +1,13 @@
 import React from 'react';
 import moment, {Moment} from 'moment';
 
+type Days = {
+  weekCalendar: Moment[];
+  id: string;
+};
 type State = [
   {
-    days: Moment[][];
+    days: Days[];
     monthString: string;
     year: number;
     month: number;
@@ -11,9 +15,8 @@ type State = [
   any,
 ];
 
-export default (defaultDate: Date): State => {
+export default (defaultDate: Date, months = moment.months()): State => {
   const [date, setDate] = React.useState<Date>(defaultDate);
-  const months = moment.months();
   const startDay = moment(date)
     .clone()
     .startOf('month')
@@ -22,14 +25,15 @@ export default (defaultDate: Date): State => {
     .clone()
     .endOf('month')
     .endOf('week');
-  const days: Moment[][] = [];
+  const days: Days[] = [];
   const dateClone = startDay.clone().subtract(1, 'day');
   while (dateClone.isBefore(endDay, 'day')) {
-    days.push(
-      Array(7)
+    days.push({
+      weekCalendar: Array(7)
         .fill(0)
         .map(() => dateClone.add(1, 'day').clone()),
-    );
+      id: String(dateClone.clone().week()),
+    });
   }
   const calendar = {
     days,

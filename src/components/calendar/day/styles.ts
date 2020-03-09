@@ -11,6 +11,7 @@ export default makeStyles((theme: Theme) =>
         borderSpacing: '0',
         tableLayout: 'fixed',
       },
+      minHeight: '7rem',
     },
     tableBg: {
       height: '100%',
@@ -20,7 +21,7 @@ export default makeStyles((theme: Theme) =>
       borderColor: 'transparent',
     },
     rowBody: {
-      padding: '0.4rem 0.5rem',
+      margin: '0.4rem 0.5rem',
     },
     containerBg: {
       position: 'absolute',

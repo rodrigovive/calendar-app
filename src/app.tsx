@@ -3,13 +3,15 @@ import Home from './pages/home';
 import {ThemeProvider} from '@material-ui/styles';
 import {CssBaseline} from '@material-ui/core';
 import theme from './themes/theme';
-
+import {ReminderProvider} from 'context/reminder';
 const App = () => {
   return (
     <main>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Home />
+        <ReminderProvider>
+          <Home />
+        </ReminderProvider>
       </ThemeProvider>
     </main>
   );

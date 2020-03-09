@@ -18,6 +18,9 @@ import MomentUtils from '@date-io/moment';
 import {Reminder, initialReminder} from 'types/reminder';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import useSetState from 'hooks/use-state';
+import {SketchPicker, ColorResult} from 'react-color';
+import {useReminderDispatch} from 'context/reminder';
+import moment from 'moment';
 
 type Props = {
   isOpen: boolean;
@@ -32,23 +35,50 @@ const ModalReminder = ({
   reminder: {day, reminderText, city, color, id},
   maxTextLength,
 }: Props) => {
+  const dispatch = useReminderDispatch();
   const classes = useStyles();
+  const [values, setValues] = useSetState(initialReminder);
+  const clearStates = () => {
+    setValues({
+      day: day,
+      reminderText: '',
+      city: '',
+      color: '',
+    });
+  };
   const handleClose = () => {
     setModalOpen(false);
+    clearStates();
   };
-  const [values, setValues] = useSetState(initialReminder);
   const isValidText = values.reminderText.length >= maxTextLength;
   React.useEffect(() => {
-    setValues({
-      day,
-      reminderText,
-      city,
-      color,
-    });
-  }, [day, reminderText, city, color]);
+    if (id) {
+      setValues({
+        day,
+        reminderText,
+        city,
+        color,
+      });
+    } else {
+      clearStates();
+    }
+  }, [day, reminderText, city, color, id]);
+
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    console.log(values);
+    if (id) {
+      dispatch({
+        type: 'update',
+        payload: values,
+      });
+    } else {
+      dispatch({
+        type: 'add',
+        payload: values,
+      });
+    }
+    setModalOpen(false);
+    clearStates();
   };
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     setValues({
@@ -133,19 +163,34 @@ const ModalReminder = ({
                 </Grid>
                 <Grid item xs={12}>
                   <KeyboardTimePicker
-                    margin="normal"
                     id="time-picker"
                     label="Time"
                     variant="inline"
                     name="day"
                     value={values.day}
                     onChange={date => {
-                      setValues({
-                        day: date,
-                      });
+                      if (date) {
+                        const [hour, min] = date.format('HH:mm').split(':');
+                        setValues({
+                          day: values.day.clone().set({
+                            hour: Number(hour),
+                            minute: Number(min),
+                          }),
+                        });
+                      }
                     }}
                     KeyboardButtonProps={{
                       'aria-label': 'reminder-time',
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <SketchPicker
+                    color={values.color}
+                    onChange={(color: ColorResult) => {
+                      setValues({
+                        color: color.hex,
+                      });
                     }}
                   />
                 </Grid>
