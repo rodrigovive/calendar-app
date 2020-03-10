@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Backdrop,
-  Grid,
-  Modal,
-  Fade,
-  TextField,
-  Button,
-  Typography,
-} from '@material-ui/core';
+import {Backdrop, Modal, Fade, Typography} from '@material-ui/core';
 import useStyles from './styles';
 import {
   MuiPickersUtilsProvider,
@@ -16,24 +8,27 @@ import {
 } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import {Reminder, initialReminder} from 'types/reminder';
-import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import useSetState from 'hooks/use-state';
-import {SketchPicker, ColorResult} from 'react-color';
-import {useReminderDispatch} from 'context/reminder';
+import {
+  useReminderDispatch,
+  ADD_REMINDER,
+  UPDATE_REMINDER,
+  getForecastByCity,
+} from 'context/reminder';
+import * as shortid from 'shortid';
 import moment from 'moment';
+import FormReminder from 'components/form-reminder';
 
 type Props = {
   isOpen: boolean;
   setModalOpen: (status: boolean) => void;
   reminder: Reminder;
-  maxTextLength: number;
 };
 
 const ModalReminder = ({
   isOpen,
   setModalOpen,
   reminder: {day, reminderText, city, color, id},
-  maxTextLength,
 }: Props) => {
   const dispatch = useReminderDispatch();
   const classes = useStyles();
@@ -50,7 +45,6 @@ const ModalReminder = ({
     setModalOpen(false);
     clearStates();
   };
-  const isValidText = values.reminderText.length >= maxTextLength;
   React.useEffect(() => {
     if (id) {
       setValues({
@@ -66,16 +60,24 @@ const ModalReminder = ({
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    const reminderData = {
+      ...values,
+      id: id || shortid.generate(),
+    };
     if (id) {
       dispatch({
-        type: 'update',
-        payload: values,
+        type: UPDATE_REMINDER,
+        payload: reminderData,
       });
     } else {
       dispatch({
-        type: 'add',
-        payload: values,
+        type: ADD_REMINDER,
+        payload: reminderData,
       });
+    }
+    const currentMax = moment().add(5, 'day');
+    if (values.day < currentMax && values.day > moment()) {
+      getForecastByCity(dispatch, reminderData);
     }
     setModalOpen(false);
     clearStates();
@@ -86,136 +88,41 @@ const ModalReminder = ({
     });
   };
   return (
-    <MuiPickersUtilsProvider utils={MomentUtils}>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={isOpen}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-          classes: {
-            root: classes.backDrop,
-          },
-        }}
-      >
-        <Fade in={isOpen}>
-          <div className={classes.paper}>
-            <Typography id="transition-modal-title" variant="h5">
-              {id ? `Edit reminder ${id}` : 'New reminder'}
-            </Typography>
-            <form onSubmit={handleSubmit}>
-              <Grid container direction="column" spacing={3}>
-                <Grid item xs={12}>
-                  <TextField
-                    InputLabelProps={{shrink: true}}
-                    id="reminderText"
-                    error={isValidText}
-                    helperText={
-                      isValidText ? (
-                        <Typography
-                          data-testid="title-error-message"
-                          component={'span'}
-                        >
-                          The text is too long!
-                        </Typography>
-                      ) : null
-                    }
-                    name="reminderText"
-                    label="Reminder title"
-                    value={values.reminderText}
-                    fullWidth
-                    onChange={handleChange}
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    InputLabelProps={{shrink: true}}
-                    id="city"
-                    fullWidth
-                    name="city"
-                    required
-                    label="City"
-                    value={values.city}
-                    onChange={handleChange}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <KeyboardDatePicker
-                    label="Date"
-                    autoOk
-                    variant="inline"
-                    value={values.day}
-                    onChange={date => {
-                      setValues({
-                        day: date,
-                      });
-                    }}
-                    name="day"
-                    KeyboardButtonProps={{
-                      'aria-label': 'reminder-date',
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <KeyboardTimePicker
-                    id="time-picker"
-                    label="Time"
-                    variant="inline"
-                    name="day"
-                    value={values.day}
-                    onChange={date => {
-                      if (date) {
-                        const [hour, min] = date.format('HH:mm').split(':');
-                        setValues({
-                          day: values.day.clone().set({
-                            hour: Number(hour),
-                            minute: Number(min),
-                          }),
-                        });
-                      }
-                    }}
-                    KeyboardButtonProps={{
-                      'aria-label': 'reminder-time',
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <SketchPicker
-                    color={values.color}
-                    onChange={(color: ColorResult) => {
-                      setValues({
-                        color: color.hex,
-                      });
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<SaveAltIcon />}
-                    type="submit"
-                  >
-                    {id ? 'Update' : 'Save'}
-                  </Button>
-                </Grid>
-              </Grid>
-            </form>
-          </div>
-        </Fade>
-      </Modal>
-    </MuiPickersUtilsProvider>
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      className={classes.modal}
+      open={isOpen}
+      onClose={handleClose}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+        classes: {
+          root: classes.backDrop,
+        },
+      }}
+    >
+      <Fade in={isOpen}>
+        <div className={classes.paper}>
+          <Typography id="transition-modal-title" variant="h5">
+            {id ? `Edit reminder` : 'New reminder'}
+          </Typography>
+          <FormReminder
+            handleSubmit={handleSubmit}
+            values={values}
+            handleChange={handleChange}
+            id={id}
+            setValues={setValues}
+          />
+        </div>
+      </Fade>
+    </Modal>
   );
 };
 ModalReminder.defaultProps = {
   reminder: initialReminder,
   isOpen: false,
-  maxTextLength: 30,
 };
 
 export default ModalReminder;

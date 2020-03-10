@@ -161,6 +161,8 @@ const Day: React.FC<Props> = ({
                         <Note
                           text={reminder.reminderText}
                           color={reminder.color}
+                          forecast={reminder.forecast}
+                          time={reminder.day.clone().format('HH:mm')}
                         />
                       </div>
                     </td>

@@ -6,11 +6,12 @@ export type Reminder = {
   city: string;
   color: string;
   id?: string | number;
+  forecast?: string;
 };
 
 export const initialReminder = {
   day: moment(),
   reminderText: '',
   city: '',
-  color: '',
+  color: '#E07070',
 };

@@ -98,6 +98,12 @@ module.exports = function(_env, argv) {
         'process.env.NODE_ENV': JSON.stringify(
           isProduction ? 'production' : 'development',
         ),
+        'process.env.REACT_APP_FORECAST': JSON.stringify(
+          process.env.REACT_APP_FORECAST,
+        ),
+        'process.env.REACT_APP_FORECAST_ID': JSON.stringify(
+          process.env.REACT_APP_FORECAST_ID,
+        ),
       }),
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'public/index.html'),
