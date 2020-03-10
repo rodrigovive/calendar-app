@@ -15,6 +15,7 @@ type Props = {
   setModalOpen: (isOpen: boolean) => void;
   setReminder: (values: Reminder) => void;
   weekNumber: string;
+  month: number;
 };
 
 type TypeAcc = {
@@ -69,11 +70,20 @@ const getReminderInWeek = (
   return reminderWeek;
 };
 
+const stylesHeight: CSS.Properties = {
+  height: '7rem',
+};
+
+const stylesNumberDay: CSS.Properties = {
+  color: 'gray',
+};
+
 const Day: React.FC<Props> = ({
   weekCalendar,
   setModalOpen,
   setReminder,
   weekNumber,
+  month,
 }) => {
   const reminderState = useReminderState();
   const remindersInWeek = getReminderInWeek(
@@ -82,11 +92,12 @@ const Day: React.FC<Props> = ({
     weekNumber,
   );
   const classes = useStyles();
-  const styles: CSS.Properties = {
-    height: remindersInWeek.length ? undefined : '7rem',
-  };
+
   return (
-    <div className={classes.containerTable} style={styles}>
+    <div
+      className={classes.containerTable}
+      style={remindersInWeek.length ? undefined : stylesHeight}
+    >
       <div className={classes.containerBg}>
         <table className={classes.tableBg}>
           <tbody>
@@ -123,8 +134,13 @@ const Day: React.FC<Props> = ({
                     });
                     setModalOpen(true);
                   }}
+                  style={month !== day.month() ? stylesNumberDay : undefined}
                 >
-                  <Typography color="inherit" align="left">
+                  <Typography
+                    color="inherit"
+                    align="left"
+                    className={classes.rowDay}
+                  >
                     {day.date()}
                   </Typography>
                 </td>
@@ -158,12 +174,7 @@ const Day: React.FC<Props> = ({
                           setModalOpen(true);
                         }}
                       >
-                        <Note
-                          text={reminder.reminderText}
-                          color={reminder.color}
-                          forecast={reminder.forecast}
-                          time={reminder.day.clone().format('HH:mm')}
-                        />
+                        <Note reminder={reminder} />
                       </div>
                     </td>
                   ) : (

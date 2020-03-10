@@ -36,7 +36,9 @@ const FormReminder = ({
   setValues,
 }: Props) => {
   const isValidText = values.reminderText.length >= maxTextLength;
-
+  const isInvalidData = Boolean(
+    !isValidText && values.reminderText.length > 0 && values.city.length > 0,
+  );
   return (
     <form onSubmit={handleSubmit} data-testid="form">
       <Grid container direction="column" spacing={3}>
@@ -135,6 +137,7 @@ const FormReminder = ({
             color="primary"
             startIcon={<SaveAltIcon />}
             type="submit"
+            disabled={!isInvalidData}
           >
             {id ? 'Update' : 'Save'}
           </Button>

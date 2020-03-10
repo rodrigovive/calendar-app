@@ -11,9 +11,10 @@ type Props = {
     weekCalendar: Moment[];
     id: string;
   }[];
+  month: number;
 };
 
-const Calendar: React.FC<Props> = ({days}) => {
+const Calendar: React.FC<Props> = ({days, month}) => {
   const classes = useStyles();
   const [isModalReminderOpen, setModalReminderOpen] = React.useState(false);
   const [reminder, setReminder] = React.useState<Reminder>(initialReminder);
@@ -39,6 +40,7 @@ const Calendar: React.FC<Props> = ({days}) => {
                   weekCalendar={weekCalendar}
                   setReminder={setReminder}
                   setModalOpen={setModalReminderOpen}
+                  month={month}
                 />
               ))}
             </td>

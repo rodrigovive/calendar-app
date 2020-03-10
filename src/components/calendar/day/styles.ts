@@ -19,6 +19,15 @@ export default makeStyles((theme: Theme) =>
     rowHead: {
       padding: '0.5rem',
       borderColor: 'transparent',
+      '&:first-child, &:last-child': {
+        color: theme.palette.primary.main,
+      },
+    },
+    rowDay: {
+      fontWeight: 'bold',
+    },
+    dayInOtherMonth: {
+      color: 'gray',
     },
     rowBody: {
       margin: '0.4rem 0.5rem',

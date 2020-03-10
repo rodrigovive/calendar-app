@@ -10,6 +10,7 @@ export default makeStyles((theme: Theme) =>
     },
     text: {
       color: 'white',
+      fontWeight: 'bold',
     },
   }),
 );

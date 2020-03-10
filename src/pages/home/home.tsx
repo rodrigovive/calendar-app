@@ -30,21 +30,25 @@ const Home = ({date}: Props) => {
         >
           <Grid item>
             <ArrowBackIosIcon
+              className={classes.icon}
+              fontSize="large"
               onClick={() => setCalendar(new Date(year, month - 1))}
             />
           </Grid>
           <Grid item>
-            <Typography>
+            <Typography variant="h2">
               {monthString} - {year}
             </Typography>
           </Grid>
           <Grid item>
             <ArrowForwardIosIcon
+              className={classes.icon}
+              fontSize="large"
               onClick={() => setCalendar(new Date(year, month + 1))}
             />
           </Grid>
         </Grid>
-        <Calendar days={days} />
+        <Calendar days={days} month={month} />
       </Grid>
     </Grid>
   );

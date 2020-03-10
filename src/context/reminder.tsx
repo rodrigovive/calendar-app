@@ -4,10 +4,11 @@ import moment from 'moment';
 export const ADD_REMINDER = 'ADD_REMINDER';
 export const UPDATE_REMINDER = 'UPDATE_REMINDER';
 export const ADD_FORECAST = 'ADD_FORECAST';
-
+export const DELETE_REMINDER = 'DELETE_REMINDER';
 type Action =
   | {type: 'ADD_REMINDER'; payload: Reminder}
   | {type: 'UPDATE_REMINDER'; payload: Reminder}
+  | {type: 'DELETE_REMINDER'; payload: Reminder}
   | {
       type: 'ADD_FORECAST';
       payload: Reminder;
@@ -94,6 +95,21 @@ function reminderReducer(state: State, action: Action) {
         }
         return reminder;
       });
+      return {
+        ...state,
+        [year]: {
+          ...state[year],
+          [weekNumber]: {
+            ...((state[year] && state[year][weekNumber]) || {}),
+            [weekDay]: sortedReminders,
+          },
+        },
+      };
+    }
+    case DELETE_REMINDER: {
+      const sortedReminders = remindersInDay.filter(
+        reminder => reminder.id !== action.payload.id,
+      );
       return {
         ...state,
         [year]: {

@@ -12,5 +12,10 @@ export default makeStyles((theme: Theme) =>
       padding: '1rem',
       marginBottom: '1rem',
     },
+    icon: {
+      '&:hover': {
+        cursor: 'pointer',
+      },
+    },
   }),
 );
