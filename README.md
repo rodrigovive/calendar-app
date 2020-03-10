@@ -27,7 +27,7 @@ The app should be running in http://localhost:8080/
 
 ```
     npm test
-    npm build
+    npm run build
 ```
 
 The build app should be appear in /dist
