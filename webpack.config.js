@@ -6,7 +6,9 @@ const TerserWebpackPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
-
+const dotenv = require('dotenv').config({
+  path: path.join(__dirname, '.env'),
+});
 module.exports = function(_env, argv) {
   const isProduction = argv.mode === 'production';
   const isDevelopment = !isProduction;
@@ -16,7 +18,7 @@ module.exports = function(_env, argv) {
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'assets/js/[name].[contenthash:8].js',
-      publicPath: '/',
+      publicPath: dotenv.parsed.PUBLIC_URL,
     },
     module: {
       rules: [
@@ -104,6 +106,13 @@ module.exports = function(_env, argv) {
         'process.env.REACT_APP_FORECAST_ID': JSON.stringify(
           process.env.REACT_APP_FORECAST_ID,
         ),
+        'process.env.OPEN_WEATHER_URL': JSON.stringify(
+          process.env.OPEN_WEATHER_URL,
+        ),
+        'process.env.OPEN_WEATHER_MAP_ID': JSON.stringify(
+          process.env.OPEN_WEATHER_MAP_ID,
+        ),
+        'process.env.PUBLIC_URL': JSON.stringify(process.env.PUBLIC_URL),
       }),
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'public/index.html'),

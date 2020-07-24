@@ -1,43 +1,57 @@
-# Calendar App
+<h1 align="center">Welcome to calendar 👋</h1>
+<p>
+  <a href="https://www.npmjs.com/package/calendar" target="_blank">
+    <img alt="Version" src="https://img.shields.io/npm/v/calendar.svg">
+  </a>
+  <img src="https://img.shields.io/badge/node-%3E%3D10.3.0-blue.svg" />
+  <img src="https://img.shields.io/badge/npm-%3E%3D5.5.0-blue.svg" />
+  <a href="https://github.com/rodrigovive/calendar-app#readme" target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>
+  <a href="#" target="_blank">
+    <img alt="License: ISC" src="https://img.shields.io/badge/License-ISC-yellow.svg" />
+  </a>
+</p>
 
-Calendar App
+> Calendar with typescript, In order to add a weather service call from a free API such Open Weather Map https://openweathermap.org/forecast5
 
-### Dependencies
+### 🏠 [Homepage](https://rodrigovive.github.io/calendar-app/)
 
-- React
-- Moment
-- Material-UI
-- Typescript
-- React-color
+### ✨ [Demo](https://rodrigovive.github.io/calendar-app/)
 
-### Requirements
+## Prerequisites
 
-- Node 12
+- node >=10.3.0
+- npm >=5.5.0
 
-### Setup
+## Install
 
+```sh
+yarn install
 ```
-    npm install
-    npm start
+
+## Usage
+
+```sh
+yarn run start
 ```
 
-The app should be running in http://localhost:8080/
+## Run tests
 
-### Command
-
-```
-    npm test
-    npm run build
+```sh
+yarn run test
 ```
 
-The build app should be appear in /dist
+## Author
 
-### Bonus
+👤 **Jhair Rodrigo Viveros Cordova**
 
-Delete one reminder for a specified date
+* Website: https://rodrigoviveros.me/
+* Github: [@rodrigovive](https://github.com/rodrigovive)
 
-### Constraints
+## Show your support
 
-In order to add a weather service call from a free API such Open Weather Map https://openweathermap.org/forecast5
-is limited for 5 day forecast is available at any location or city. It includes weather data every 3 hours.
-Take account that for get a forecast you need to add reminder based from your current time until 5 days.
+Give a ⭐️ if this project helped you!
+
+***
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_

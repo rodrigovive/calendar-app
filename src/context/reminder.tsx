@@ -155,7 +155,7 @@ async function getForecastByCity(dispatch: Dispatch, reminder: Reminder) {
   try {
     const {cod, list} = await (
       await fetch(
-        `http://api.openweathermap.org/data/2.5/forecast?q=${reminder.city}&appid=17d1438a71bce72a11c6e3a38dbae6e4`,
+        `${process.env.OPEN_WEATHER_URL}?q=${reminder.city}&appid=${process.env.OPEN_WEATHER_MAP_ID}`,
       )
     ).json();
     if (cod === '200') {

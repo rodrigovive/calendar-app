@@ -2,9 +2,7 @@ import React from 'react';
 import {Typography} from '@material-ui/core';
 import useStyles from './styles';
 import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import Fab from '@material-ui/core/Fab';
 import {useReminderDispatch, DELETE_REMINDER} from 'context/reminder';
 import {Reminder, initialReminder} from 'types/reminder';
 interface Props {

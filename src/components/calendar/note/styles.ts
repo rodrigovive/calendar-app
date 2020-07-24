@@ -6,6 +6,7 @@ type NoteTypes = {
 
 export default makeStyles<{}, NoteTypes>({
   root: {
+    border: '3px solid blue',
     backgroundColor: ({bgColor}) => bgColor,
     '&:hover': {
       //boxShadow: 'inset 15px 15px 15px 15px rgba(0,0,0, .2)',

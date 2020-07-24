@@ -4,5 +4,5 @@ import App from '../app';
 
 test('render app', () => {
   const {container, debug} = render(<App />);
-  expect(container.firstChild).not.toBeEmpty();
+  expect(container.firstChild).not.toBeEmptyDOMElement();
 });
